@@ -146,7 +146,7 @@ export default function Header() {
                   : "border-white text-[#017489] hover:bg-white hover:text-[#017489]",
               )}
             >
-              <Link href="/book-appointment">Book Appointment</Link>
+              <Link href="/contact">Book Appointment</Link>
             </Button>
             <Button asChild size="sm" className="bg-[#017489] hover:bg-[#01667a] text-white">
               <Link href="/client-portal">Client Portal</Link>
