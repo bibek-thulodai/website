@@ -22,7 +22,7 @@ const navigation = [
     submenu: [
       { name: "Gallery", href: "/gallery" },
       { name: "Blog", href: "/blog" },
-      { name: "Merchandise", href: "/merchandise" },
+    
       { name: "Opportunities Hub", href: "/opportunities" },
       { name: "Long Projects", href: "/long-projects" },
       { name: "Our Initiatives", href: "/our-initiatives" },

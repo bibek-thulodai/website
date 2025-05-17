@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { projects as projectsData } from "@/components/projects/projects-list"
+import { projects } from "@/components/projects/projects-data"
 import ProjectDetailPageClient from "./ProjectDetailPageClient"
 
 type Props = {
@@ -10,7 +10,8 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = projectsData.find((p) => p.id === params.id)
+  const awaitedParams = await params;
+  const project = projects.find((p) => String(p.id) === String(awaitedParams.id));
 
   if (!project) {
     return {
@@ -25,8 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function ProjectDetailPage({ params }: { params: { id: string } }) {
-  const project = projectsData.find((p) => p.id === params.id)
+export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
+  const awaitedParams = await params;
+  const project = projects.find((p) => String(p.id) === String(awaitedParams.id))
   if (!project) return notFound()
   return <ProjectDetailPageClient project={project} />
 }

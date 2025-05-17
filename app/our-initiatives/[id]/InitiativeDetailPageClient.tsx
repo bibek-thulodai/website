@@ -2,8 +2,6 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { notFound } from "next/navigation"
-import { initiatives } from "@/data/initiatives-data"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -22,15 +20,9 @@ import {
 } from "lucide-react"
 import { AnimatedSection } from "@/components/ui/animated-section"
 
-type Props = {
-  params: { id: string }
-}
-
-export default function InitiativeDetailPageClient({ params }: Props) {
-  const initiative = initiatives.find((i) => i.id === params.id)
-
+export default function InitiativeDetailPageClient({ initiative }: { initiative: any }) {
   if (!initiative) {
-    notFound()
+    return null // fallback UI or error
   }
 
   return (
@@ -126,7 +118,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content - 2/3 width */}
           <div className="lg:col-span-2 space-y-12">
-            <AnimatedSection animation="fade-up">
+            <AnimatedSection animation="fadeIn">
               <div>
                 <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center">
                   <Building className="h-6 w-6 mr-3 text-[#0a7d89]" />
@@ -138,14 +130,14 @@ export default function InitiativeDetailPageClient({ params }: Props) {
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-up">
+            <AnimatedSection animation="fadeIn">
               <div>
                 <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center">
                   <Target className="h-6 w-6 mr-3 text-[#0a7d89]" />
                   Objectives
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {initiative.objectives.map((objective, index) => (
+                  {initiative.objectives.map((objective: string, index: number) => (
                     <div key={index} className="bg-gray-50 p-6 rounded-xl border-l-4 border-[#0a7d89]">
                       <div className="flex items-start">
                         <div className="flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full bg-[#0a7d89]/10 text-[#0a7d89] font-bold mr-3">
@@ -159,7 +151,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-up">
+            <AnimatedSection animation="fadeIn">
               <div>
                 <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center">
                   <CheckCircle2 className="h-6 w-6 mr-3 text-[#0a7d89]" />
@@ -167,7 +159,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                 </h2>
                 <div className="bg-gray-50 p-8 rounded-xl">
                   <ul className="space-y-4">
-                    {initiative.achievements.map((achievement, index) => (
+                    {initiative.achievements.map((achievement: string, index: number) => (
                       <li key={index} className="flex items-start">
                         <div className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-[#0a7d89] text-white text-xs mr-3 mt-0.5">
                           ✓
@@ -182,19 +174,19 @@ export default function InitiativeDetailPageClient({ params }: Props) {
 
             {/* Conditional Sections based on initiative type */}
             {initiative.hasTabs && initiative.editions && (
-              <AnimatedSection animation="fade-up">
+              <AnimatedSection animation="fadeIn">
                 <div>
                   <h2 className="text-3xl font-bold mb-6 text-gray-800">Past Editions</h2>
                   <Tabs defaultValue={initiative.editions[0].id} className="w-full">
                     <TabsList className="grid grid-cols-2 mb-6 w-full max-w-md">
-                      {initiative.editions.map((edition) => (
+                      {initiative.editions.map((edition: any) => (
                         <TabsTrigger key={edition.id} value={edition.id} className="text-sm">
                           {edition.title}
                         </TabsTrigger>
                       ))}
                     </TabsList>
 
-                    {initiative.editions.map((edition) => (
+                    {initiative.editions.map((edition: any) => (
                       <TabsContent key={edition.id} value={edition.id} className="mt-0">
                         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                           <div className="p-6 border-b border-gray-200 bg-gray-50">
@@ -209,7 +201,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                                   <div className="mb-6">
                                     <h4 className="font-semibold text-[#0a7d89] mb-2">Featured Speakers</h4>
                                     <ul className="list-disc pl-5 text-gray-700 space-y-1">
-                                      {edition.speakers.map((speaker, index) => (
+                                      {edition.speakers.map((speaker: string, index: number) => (
                                         <li key={index}>{speaker}</li>
                                       ))}
                                     </ul>
@@ -220,7 +212,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                                   <div className="mb-6">
                                     <h4 className="font-semibold text-[#0a7d89] mb-2">Key Topics</h4>
                                     <ul className="list-disc pl-5 text-gray-700 space-y-1">
-                                      {edition.topics.map((topic, index) => (
+                                      {edition.topics.map((topic: string, index: number) => (
                                         <li key={index}>{topic}</li>
                                       ))}
                                     </ul>
@@ -231,7 +223,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                                   <div className="mb-6">
                                     <h4 className="font-semibold text-[#0a7d89] mb-2">Locations</h4>
                                     <ul className="list-disc pl-5 text-gray-700 space-y-1">
-                                      {edition.locations.map((location, index) => (
+                                      {edition.locations.map((location: string, index: number) => (
                                         <li key={index}>{location}</li>
                                       ))}
                                     </ul>
@@ -242,7 +234,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                                   <div className="mb-6">
                                     <h4 className="font-semibold text-[#0a7d89] mb-2">Skills Covered</h4>
                                     <ul className="list-disc pl-5 text-gray-700 space-y-1">
-                                      {edition.skills.map((skill, index) => (
+                                      {edition.skills.map((skill: string, index: number) => (
                                         <li key={index}>{skill}</li>
                                       ))}
                                     </ul>
@@ -252,7 +244,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                                 <div className="mb-6">
                                   <h4 className="font-semibold text-[#0a7d89] mb-2">Highlights</h4>
                                   <ul className="list-disc pl-5 text-gray-700 space-y-1">
-                                    {edition.highlights.map((highlight, index) => (
+                                    {edition.highlights.map((highlight: string, index: number) => (
                                       <li key={index}>{highlight}</li>
                                     ))}
                                   </ul>
@@ -286,7 +278,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                               </div>
 
                               <div className="space-y-4">
-                                {edition.gallery.map((image, index) => (
+                                {edition.gallery.map((image: string, index: number) => (
                                   <div key={index} className="relative h-48 rounded-lg overflow-hidden shadow-md">
                                     <Image
                                       src={image || "/placeholder.svg"}
@@ -308,11 +300,11 @@ export default function InitiativeDetailPageClient({ params }: Props) {
             )}
 
             {initiative.bootcampModules && (
-              <AnimatedSection animation="fade-up">
+              <AnimatedSection animation="fadeIn">
                 <div>
                   <h2 className="text-3xl font-bold mb-6 text-gray-800">Bootcamp Modules</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {initiative.bootcampModules.map((module, index) => (
+                    {initiative.bootcampModules.map((module: any, index: number) => (
                       <Card key={index} className="overflow-hidden">
                         <div className="h-2 bg-[#0a7d89]"></div>
                         <CardContent className="pt-6">
@@ -327,11 +319,11 @@ export default function InitiativeDetailPageClient({ params }: Props) {
             )}
 
             {initiative.conclaveComponents && (
-              <AnimatedSection animation="fade-up">
+              <AnimatedSection animation="fadeIn">
                 <div>
                   <h2 className="text-3xl font-bold mb-6 text-gray-800">Conclave Components</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {initiative.conclaveComponents.map((component, index) => (
+                    {initiative.conclaveComponents.map((component: any, index: number) => (
                       <Card key={index} className="overflow-hidden">
                         <div className="h-2 bg-[#0a7d89]"></div>
                         <CardContent className="pt-6">
@@ -345,11 +337,11 @@ export default function InitiativeDetailPageClient({ params }: Props) {
               </AnimatedSection>
             )}
 
-            <AnimatedSection animation="fade-up">
+            <AnimatedSection animation="fadeIn">
               <div>
                 <h2 className="text-3xl font-bold mb-6 text-gray-800">Gallery</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {initiative.gallery.map((image, index) => (
+                  {initiative.gallery.map((image: string, index: number) => (
                     <div key={index} className="relative h-64 rounded-xl overflow-hidden shadow-lg">
                       <Image
                         src={image || "/placeholder.svg"}
@@ -363,11 +355,11 @@ export default function InitiativeDetailPageClient({ params }: Props) {
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-up">
+            <AnimatedSection animation="fadeIn">
               <div>
                 <h2 className="text-3xl font-bold mb-6 text-gray-800">Testimonials</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {initiative.testimonials?.map((testimonial, index) => (
+                  {initiative.testimonials?.map((testimonial: any, index: number) => (
                     <div key={index} className="bg-gray-50 p-6 rounded-xl relative">
                       <div className="absolute top-4 right-4 text-4xl text-[#0a7d89]/20">"</div>
                       <p className="text-gray-700 mb-4 italic relative z-10">{testimonial.quote}</p>
@@ -389,7 +381,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
 
           {/* Sidebar - 1/3 width */}
           <div className="space-y-8">
-            <AnimatedSection animation="fade-left">
+            <AnimatedSection animation="fadeLeft">
               <div className="bg-[#0a7d89]/5 p-6 rounded-xl">
                 <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center">
                   <BarChart3 className="h-5 w-5 mr-2 text-[#0a7d89]" /> Impact
@@ -398,7 +390,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-left">
+            <AnimatedSection animation="fadeLeft">
               <div className="bg-[#0a7d89]/5 p-6 rounded-xl">
                 <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center">
                   <Users2 className="h-5 w-5 mr-2 text-[#0a7d89]" /> Partners
@@ -407,11 +399,11 @@ export default function InitiativeDetailPageClient({ params }: Props) {
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-left">
+            <AnimatedSection animation="fadeLeft">
               <div className="border border-[#0a7d89]/20 p-6 rounded-xl">
                 <h3 className="text-xl font-bold mb-4 text-gray-800">Upcoming Events</h3>
                 <div className="space-y-4">
-                  {initiative.upcomingEvents?.map((event, index) => (
+                  {initiative.upcomingEvents?.map((event: any, index: number) => (
                     <div key={index} className="border-b border-gray-200 last:border-b-0 pb-4 last:pb-0">
                       <h4 className="font-semibold text-[#0a7d89]">{event.title}</h4>
                       <div className="flex items-center text-sm text-gray-500 mt-1">
@@ -433,7 +425,7 @@ export default function InitiativeDetailPageClient({ params }: Props) {
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-left">
+            <AnimatedSection animation="fadeLeft">
               <div
                 id="get-involved"
                 className="bg-gradient-to-br from-[#121d3e] to-[#0a7d89] p-6 rounded-xl text-white"
@@ -453,34 +445,6 @@ export default function InitiativeDetailPageClient({ params }: Props) {
                 </div>
               </div>
             </AnimatedSection>
-          </div>
-        </div>
-      </div>
-
-      {/* Related Initiatives */}
-      <div className="bg-gray-50 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-gray-800 text-center">Related Initiatives</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {initiatives
-              .filter((i) => i.id !== initiative.id)
-              .slice(0, 3)
-              .map((relatedInitiative) => (
-                <Link href={`/our-initiatives/${relatedInitiative.id}`} key={relatedInitiative.id}>
-                  <Card className="group overflow-hidden border border-gray-200 hover:border-[#0a7d89] hover:shadow-xl transition-all duration-300 cursor-pointer h-full">
-                    <div className="h-40 bg-gradient-to-br from-[#0a7d89]/10 to-[#0a7d89]/5 flex items-center justify-center">
-                      <relatedInitiative.icon className="h-16 w-16 text-[#0a7d89] group-hover:scale-110 transition-transform duration-300" />
-                    </div>
-                    <CardContent className="p-6">
-                      <Badge className="bg-[#0a7d89] hover:bg-[#0a7d89]/90 mb-2">{relatedInitiative.category}</Badge>
-                      <h3 className="text-lg font-bold mb-2 group-hover:text-[#0a7d89] transition-colors">
-                        {relatedInitiative.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm line-clamp-2">{relatedInitiative.description}</p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
           </div>
         </div>
       </div>

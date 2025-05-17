@@ -52,7 +52,7 @@ export default function OpportunitiesHero() {
             <Button size="lg" className="bg-white text-[#013A87] hover:bg-white/90 hover:text-[#013A87] text-lg px-8">
               Browse Opportunities
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 text-lg px-8">
+            <Button size="lg" variant="outline" className="border-white text-primary hover:bg-white/20 text-lg px-8">
               Post an Opportunity
             </Button>
           </div>

@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { FileText, Layers, HeartHandshake, CheckCircle, ShieldCheck, BarChart, Users, Globe } from "lucide-react"
 import StylishCTA from "@/components/shared/StylishCTA"
+import MerchandisePage from "../merchandise/page"
 
 // Products Data
 const products = [
@@ -255,298 +256,303 @@ function Quote(props: any) {
 
 export default function ProductsPage() {
   return (
-    <main className="min-h-screen">
-      {/* Hero Section */}
-      <ProductsHero />
+    <>
+      <main className="min-h-screen">
+        {/* Hero Section */}
+        <ProductsHero />
 
-      {/* Products Overview */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary mb-4">Our Innovative Products</h2>
-            <p className="text-gray-700">
-              At Creating Opportunities International, we've developed specialized products to address the specific
-              needs of educational institutions committed to excellence and impact. Each product is designed with
-              quality, practicality, and effectiveness in mind.
-            </p>
+        {/* Products Overview */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <h2 className="text-3xl font-bold text-primary mb-4">Our Innovative Products</h2>
+              <p className="text-gray-700">
+                At Creating Opportunities International, we've developed specialized products to address the specific
+                needs of educational institutions committed to excellence and impact. Each product is designed with
+                quality, practicality, and effectiveness in mind.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+              {products.map((product) => (
+                <Card
+                  key={product.id}
+                  className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                >
+                  <CardHeader>
+                    <div className="w-16 h-16 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
+                      <product.icon className="h-8 w-8 text-secondary" />
+                    </div>
+                    <CardTitle className="text-2xl">{product.title}</CardTitle>
+                    <CardDescription className="text-base mt-2">{product.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="mb-4">
+                      <Badge className="bg-secondary hover:bg-secondary-600 text-white text-base px-3 py-1">
+                        {product.price}
+                      </Badge>
+                    </div>
+                    <ul className="space-y-2">
+                      {product.features.slice(0, 4).map((feature, idx) => (
+                        <li key={idx} className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-1" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                      {product.features.length > 4 && (
+                        <li className="text-sm text-secondary font-medium">
+                          + {product.features.length - 4} more features
+                        </li>
+                      )}
+                    </ul>
+                  </CardContent>
+                  <CardFooter className="flex justify-center pt-4">
+                    <Button
+                      asChild
+                      className="border-secondary text-white bg-secondary hover:bg-secondary-600 text-base px-6"
+                    >
+                      <a href={`#${product.id}`}>Learn More</a>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-            {products.map((product) => (
-              <Card
-                key={product.id}
-                className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-              >
+        {/* Why Choose Our Products */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <h2 className="text-3xl font-bold text-primary mb-4">Why Choose Our Products</h2>
+              <p className="text-gray-700">
+                Our products are designed with excellence, practicality, and real-world impact in mind.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
                 <CardHeader>
-                  <div className="w-16 h-16 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
-                    <product.icon className="h-8 w-8 text-secondary" />
+                  <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
+                    <ShieldCheck className="h-6 w-6 text-secondary" />
                   </div>
-                  <CardTitle className="text-2xl">{product.title}</CardTitle>
-                  <CardDescription className="text-base mt-2">{product.description}</CardDescription>
+                  <CardTitle className="text-lg">Quality Assured</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="mb-4">
-                    <Badge className="bg-secondary hover:bg-secondary-600 text-white text-base px-3 py-1">
-                      {product.price}
-                    </Badge>
-                  </div>
-                  <ul className="space-y-2">
-                    {product.features.slice(0, 4).map((feature, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-1" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                    {product.features.length > 4 && (
-                      <li className="text-sm text-secondary font-medium">
-                        + {product.features.length - 4} more features
-                      </li>
-                    )}
-                  </ul>
+                  <p className="text-gray-700">
+                    Our products undergo rigorous quality testing and continuous improvement based on user feedback and
+                    emerging best practices.
+                  </p>
                 </CardContent>
-                <CardFooter className="flex justify-center pt-4">
-                  <Button
-                    asChild
-                    className="border-secondary text-white bg-secondary hover:bg-secondary-600 text-base px-6"
-                  >
-                    <a href={`#${product.id}`}>Learn More</a>
-                  </Button>
-                </CardFooter>
               </Card>
+
+              <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
+                    <BarChart className="h-6 w-6 text-secondary" />
+                  </div>
+                  <CardTitle className="text-lg">Results-Driven</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700">
+                    Each product is designed with clear outcomes in mind, delivering measurable results and tangible
+                    improvements for our clients.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
+                    <Users className="h-6 w-6 text-secondary" />
+                  </div>
+                  <CardTitle className="text-lg">Expert Support</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700">
+                    Our products come with comprehensive implementation support from our team of experts, ensuring you
+                    maximize value and impact.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
+                    <Globe className="h-6 w-6 text-secondary" />
+                  </div>
+                  <CardTitle className="text-lg">Global Best Practices</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700">
+                    Our products incorporate international standards and best practices, adapted to local contexts for
+                    optimal relevance and effectiveness.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Detailed Product Sections */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            {products.map((product) => (
+              <ProductSection key={product.id} product={product} />
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Why Choose Our Products */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary mb-4">Why Choose Our Products</h2>
-            <p className="text-gray-700">
-              Our products are designed with excellence, practicality, and real-world impact in mind.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
-                  <ShieldCheck className="h-6 w-6 text-secondary" />
-                </div>
-                <CardTitle className="text-lg">Quality Assured</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700">
-                  Our products undergo rigorous quality testing and continuous improvement based on user feedback and
-                  emerging best practices.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
-                  <BarChart className="h-6 w-6 text-secondary" />
-                </div>
-                <CardTitle className="text-lg">Results-Driven</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700">
-                  Each product is designed with clear outcomes in mind, delivering measurable results and tangible
-                  improvements for our clients.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-secondary" />
-                </div>
-                <CardTitle className="text-lg">Expert Support</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700">
-                  Our products come with comprehensive implementation support from our team of experts, ensuring you
-                  maximize value and impact.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-none shadow-md">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-secondary-100 flex items-center justify-center mb-4">
-                  <Globe className="h-6 w-6 text-secondary" />
-                </div>
-                <CardTitle className="text-lg">Global Best Practices</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700">
-                  Our products incorporate international standards and best practices, adapted to local contexts for
-                  optimal relevance and effectiveness.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Detailed Product Sections */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          {products.map((product) => (
-            <ProductSection key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* CSR Information Section */}
-      <section className="py-16 bg-gradient-to-r from-secondary-50 to-accent-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="p-8">
-                <div className="flex items-center mb-6">
-                  <div className="bg-secondary-100 p-3 rounded-lg mr-4">
-                    <HeartHandshake className="h-8 w-8 text-secondary" />
-                  </div>
-                  <h2 className="text-3xl font-bold text-primary">CSR to Startups Program</h2>
-                </div>
-
-                <p className="text-gray-700 mb-6 text-lg">
-                  Our CSR to Startups Program is an innovative initiative that connects corporate social responsibility
-                  efforts with promising startups working on sustainable solutions. This is not a product for purchase,
-                  but a collaborative program we facilitate to create meaningful partnerships.
-                </p>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div>
-                    <h3 className="text-xl font-semibold mb-3 text-primary">Program Highlights</h3>
-                    <ul className="space-y-2">
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Strategic CSR alignment with business objectives</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Startup vetting and selection process</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Impact measurement framework</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Program management and reporting</span>
-                      </li>
-                    </ul>
+        {/* CSR Information Section */}
+        <section className="py-16 bg-gradient-to-r from-secondary-50 to-accent-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div className="p-8">
+                  <div className="flex items-center mb-6">
+                    <div className="bg-secondary-100 p-3 rounded-lg mr-4">
+                      <HeartHandshake className="h-8 w-8 text-secondary" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-primary">CSR to Startups Program</h2>
                   </div>
 
-                  <div>
-                    <h3 className="text-xl font-semibold mb-3 text-primary">Benefits</h3>
-                    <ul className="space-y-2">
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Measurable social impact and reporting</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Enhanced brand reputation</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Connection with innovative solutions</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>Contribution to sustainable development goals</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                  <p className="text-gray-700 mb-6 text-lg">
+                    Our CSR to Startups Program is an innovative initiative that connects corporate social responsibility
+                    efforts with promising startups working on sustainable solutions. This is not a product for purchase,
+                    but a collaborative program we facilitate to create meaningful partnerships.
+                  </p>
 
-                <div className="flex justify-center">
-                  <Button asChild className="bg-secondary hover:bg-secondary-600">
-                    <a href="/contact">Contact Us to Learn More</a>
-                  </Button>
+                  <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                      <h3 className="text-xl font-semibold mb-3 text-primary">Program Highlights</h3>
+                      <ul className="space-y-2">
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Strategic CSR alignment with business objectives</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Startup vetting and selection process</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Impact measurement framework</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Program management and reporting</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl font-semibold mb-3 text-primary">Benefits</h3>
+                      <ul className="space-y-2">
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Measurable social impact and reporting</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Enhanced brand reputation</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Connection with innovative solutions</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Contribution to sustainable development goals</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center">
+                    <Button asChild className="bg-secondary hover:bg-secondary-600">
+                      <a href="/contact">Contact Us to Learn More</a>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Demo Request Section */}
-      <section id="demo" className="py-16 bg-secondary-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary mb-4">Request a Product Demo</h2>
-            <p className="text-gray-700">
-              See our products in action and discover how they can benefit your organization.
-            </p>
+        {/* Merchandise Section */}
+        <MerchandisePage />
+
+        {/* Demo Request Section */}
+        <section id="demo" className="py-16 bg-secondary-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <h2 className="text-3xl font-bold text-primary mb-4">Request a Product Demo</h2>
+              <p className="text-gray-700">
+                See our products in action and discover how they can benefit your organization.
+              </p>
+            </div>
+
+            <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+              <form className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="demo-name">Full Name</Label>
+                    <Input id="demo-name" placeholder="Your full name" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="demo-email">Email Address</Label>
+                    <Input id="demo-email" type="email" placeholder="Your email address" />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="demo-phone">Phone Number</Label>
+                    <Input id="demo-phone" placeholder="Your phone number" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="demo-org">Organization</Label>
+                    <Input id="demo-org" placeholder="Your organization name" />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="demo-product">Product of Interest</Label>
+                  <select
+                    id="demo-product"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">Select a product</option>
+                    <option value="academic-calendar">Academic Calendar</option>
+                    <option value="school-reform">School Reform Toolkit</option>
+                    <option value="both">Both Products</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="demo-message">Message</Label>
+                  <Textarea id="demo-message" placeholder="Tell us about your specific needs and questions" rows={4} />
+                </div>
+
+                <Button type="submit" className="w-full bg-secondary hover:bg-secondary-600">
+                  Schedule Demo
+                </Button>
+              </form>
+            </div>
           </div>
+        </section>
 
-          <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="demo-name">Full Name</Label>
-                  <Input id="demo-name" placeholder="Your full name" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="demo-email">Email Address</Label>
-                  <Input id="demo-email" type="email" placeholder="Your email address" />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="demo-phone">Phone Number</Label>
-                  <Input id="demo-phone" placeholder="Your phone number" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="demo-org">Organization</Label>
-                  <Input id="demo-org" placeholder="Your organization name" />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="demo-product">Product of Interest</Label>
-                <select
-                  id="demo-product"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="">Select a product</option>
-                  <option value="academic-calendar">Academic Calendar</option>
-                  <option value="school-reform">School Reform Toolkit</option>
-                  <option value="both">Both Products</option>
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="demo-message">Message</Label>
-                <Textarea id="demo-message" placeholder="Tell us about your specific needs and questions" rows={4} />
-              </div>
-
-              <Button type="submit" className="w-full bg-secondary hover:bg-secondary-600">
-                Schedule Demo
-              </Button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      {/* Stylish CTA Section */}
-      <StylishCTA
-        title="Ready to Transform Your Organization?"
-        description="Our products provide the tools and frameworks you need to achieve excellence, efficiency, and impact. Take the next step toward organizational transformation."
-        primaryButtonText="Contact Our Team"
-        primaryButtonLink="/contact"
-        secondaryButtonText="View All Offerings"
-        secondaryButtonLink="/offerings"
-        variant="secondary"
-      />
-    </main>
+        {/* Stylish CTA Section */}
+        <StylishCTA
+          title="Ready to Transform Your Organization?"
+          description="Our products provide the tools and frameworks you need to achieve excellence, efficiency, and impact. Take the next step toward organizational transformation."
+          primaryButtonText="Contact Our Team"
+          primaryButtonLink="/contact"
+          secondaryButtonText="View All Offerings"
+          secondaryButtonLink="/offerings"
+          variant="secondary"
+        />
+      </main>
+    </>
   )
 }

@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import MerchandiseHero from "@/components/merchandise/MerchandiseHero"
+
 import SectionHeading from "@/components/shared/SectionHeading"
-import StylishCTA from "@/components/shared/StylishCTA"
+
 import { Button } from "@/components/ui/button"
 import { Package, Tag, Heart } from "lucide-react"
 import Image from "next/image"
@@ -21,7 +21,7 @@ export default function MerchandisePage() {
 
   return (
     <main className="flex min-h-screen flex-col">
-      <MerchandiseHero />
+
 
       {/* Featured Products */}
       <section className="py-16" id="featured-products">
@@ -203,17 +203,7 @@ export default function MerchandisePage() {
         </div>
       </section>
 
-      {/* CTA Section with enhanced styling */}
-      <StylishCTA
-        title="Ready to make a difference?"
-        description="Browse our collection and support our mission with every purchase."
-        primaryButtonText="Shop Now"
-        primaryButtonLink="#featured-products"
-        variant="mixed"
-        withAnimation={true}
-        showContactForm={true}
-        secondaryButtonText="Contact Us"
-      />
+    
 
       {/* Order Modal */}
       <OrderModal

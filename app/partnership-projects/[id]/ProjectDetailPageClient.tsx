@@ -1,12 +1,22 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Calendar, MapPin, CheckCircle2, ArrowRight } from "lucide-react"
+import { ArrowLeft, Calendar, MapPin, CheckCircle2, ArrowRight, Leaf, Utensils, Globe, Award, Users, Scale, Target } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { projects } from "@/components/projects/projects-list"
+import { projects } from "@/components/projects/projects-data"
 import { AnimatedSection } from "@/components/ui/animated-section"
+
+const iconMap: Record<string, React.ElementType> = {
+  Leaf,
+  Utensils,
+  Globe,
+  Award,
+  Users,
+  Scale,
+  Target,
+}
 
 export default function ProjectDetailPageClient({ project }: { project: (typeof projects)[0] }) {
   // Find related projects (same category, excluding current project)
@@ -130,23 +140,28 @@ export default function ProjectDetailPageClient({ project }: { project: (typeof 
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800 mb-6">Related Projects</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {relatedProjects.map((relatedProject) => (
-                      <Link key={relatedProject.id} href={`/partnership-projects/${relatedProject.id}`}>
-                        <Card className="h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer border-gray-200 hover:border-[#0a7d89]">
-                          <CardContent className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                              <Badge className="bg-[#0a7d89] hover:bg-[#0a7d89]/90">{relatedProject.category}</Badge>
-                              <relatedProject.icon className="h-8 w-8 text-[#0a7d89]" />
-                            </div>
-                            <h3 className="text-lg font-bold mb-2">{relatedProject.title}</h3>
-                            <p className="text-gray-600 text-sm mb-4 line-clamp-2">{relatedProject.description}</p>
-                            <div className="flex items-center text-[#0a7d89] text-sm font-medium">
-                              View Project <ArrowRight className="ml-1 h-4 w-4" />
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    ))}
+                    {relatedProjects.map((relatedProject) => {
+                      const IconComponent = iconMap[relatedProject.icon];
+                      return (
+                        <Link key={relatedProject.id} href={`/partnership-projects/${relatedProject.id}`}>
+                          <Card className="h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer border-gray-200 hover:border-[#0a7d89]">
+                            <CardContent className="p-6">
+                              <div className="flex items-center justify-between mb-4">
+                                <Badge className="bg-[#0a7d89] hover:bg-[#0a7d89]/90">{relatedProject.category}</Badge>
+                                {IconComponent && (
+                                  <IconComponent className="h-8 w-8 text-[#0a7d89]" />
+                                )}
+                              </div>
+                              <h3 className="text-lg font-bold mb-2">{relatedProject.title}</h3>
+                              <p className="text-gray-600 text-sm mb-4 line-clamp-2">{relatedProject.description}</p>
+                              <div className="flex items-center text-[#0a7d89] text-sm font-medium">
+                                View Project <ArrowRight className="ml-1 h-4 w-4" />
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               </AnimatedSection>
@@ -155,21 +170,21 @@ export default function ProjectDetailPageClient({ project }: { project: (typeof 
 
           {/* Sidebar */}
           <div className="space-y-8">
-            <AnimatedSection animation="fade-left">
+            <AnimatedSection animation="fade-in">
               <div className="bg-[#0a7d89]/5 p-6 rounded-xl">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Impact</h3>
                 <p className="text-gray-700">{project.impact}</p>
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-left" delay={0.1}>
+            <AnimatedSection animation="fade-in" delay={0.1}>
               <div className="bg-[#0a7d89]/5 p-6 rounded-xl">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Partners</h3>
                 <p className="text-gray-700">{project.partners}</p>
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-left" delay={0.2}>
+            <AnimatedSection animation="fade-in" delay={0.2}>
               <div className="border border-dashed border-[#0a7d89]/30 p-6 rounded-xl">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Get Involved</h3>
                 <p className="text-gray-700 mb-6">
@@ -182,7 +197,7 @@ export default function ProjectDetailPageClient({ project }: { project: (typeof 
               </div>
             </AnimatedSection>
 
-            <AnimatedSection animation="fade-left" delay={0.3}>
+            <AnimatedSection animation="fade-in" delay={0.3}>
               <div className="p-6 rounded-xl bg-gray-50">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Share This Project</h3>
                 <div className="flex gap-3">

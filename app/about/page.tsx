@@ -6,6 +6,7 @@ import AboutHero from "@/components/about/AboutHero"
 import MediaMentionsSection from "@/components/about/MediaMentionsSection"
 import TeamSection from "@/components/about/TeamSection"
 import MessagesSection from "@/components/about/MessagesSection"
+import WhatWeDoSection from "@/components/about/WhatWeDoSection"
 import { Target, Eye, Shield, Lightbulb, Users, Leaf, ArrowRight } from "lucide-react"
 
 export const metadata = {
@@ -97,6 +98,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* What We Do Section */}
+      <WhatWeDoSection />
 
       {/* Stylish Core Values Section */}
       <section className="py-20 bg-white">
