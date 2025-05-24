@@ -168,8 +168,7 @@ const blogPosts = [
     date: "March 22, 2025",
     author: {
       name: "Lisa Wong",
-      role: "Fellowship Advisor",
-      image: "/placeholder.svg?height=200&width=200",
+     
     },
     readTime: "9 min read",
     image: "/placeholder.svg?height=600&width=1200",
@@ -240,13 +239,10 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-header mb-6 animate-fadeIn">{post.title}</h1>
 
             <div className="flex items-center mb-8 animate-fadeIn animate-delay-100">
-              <Avatar className="h-10 w-10 mr-3">
-                <AvatarImage src={post.author.image || "/placeholder.svg"} alt={post.author.name} />
-                <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
-              </Avatar>
+              
               <div>
                 <div className="font-medium">{post.author.name}</div>
-                <div className="text-sm text-gray-500">{post.author.role}</div>
+               
               </div>
               <div className="mx-4 text-gray-300">|</div>
               <div className="flex items-center text-sm text-gray-500">
@@ -318,32 +314,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-xl p-8 shadow-sm">
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                <Avatar className="h-24 w-24">
-                  <AvatarImage src={post.author.image || "/placeholder.svg"} alt={post.author.name} />
-                  <AvatarFallback className="text-2xl">{post.author.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="text-xl font-bold mb-2 text-header">About {post.author.name}</h3>
-                  <p className="text-gray-600 mb-4">
-                    {post.author.role} at Creating Opportunities International with expertise in{" "}
-                    {post.category.toLowerCase()}
-                    and international development. Passionate about creating sustainable impact through education and
-                    innovation.
-                  </p>
-                  <div className="flex space-x-3">
-                    <Button variant="ghost" size="sm" className="rounded-full h-8 w-8 p-0">
-                      <Twitter className="h-4 w-4 text-sky-500" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="rounded-full h-8 w-8 p-0">
-                      <Linkedin className="h-4 w-4 text-blue-700" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="rounded-full h-8 w-8 p-0">
-                      <Mail className="h-4 w-4 text-gray-600" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
+             
             </div>
           </div>
         </div>

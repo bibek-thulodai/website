@@ -26,7 +26,7 @@ export default function MerchandisePage() {
       {/* Featured Products */}
       <section className="py-16" id="featured-products">
         <div className="container mx-auto px-4">
-          <SectionHeading title="Featured Products" subtitle="Browse our exclusive collection" alignment="center" />
+          <SectionHeading title="Our Products" subtitle="Browse our exclusive collection" alignment="center" />
 
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {/* Product 1 */}
@@ -119,9 +119,7 @@ export default function MerchandisePage() {
           </div>
 
           <div className="mt-12 text-center">
-            <Button size="lg" variant="outline">
-              View All Products
-            </Button>
+           
           </div>
         </div>
       </section>

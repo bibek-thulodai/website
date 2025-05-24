@@ -1,22 +1,16 @@
+"use client"
 import ProductsHero from "@/components/products/ProductsHero"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { FileText, Layers, HeartHandshake, CheckCircle, ShieldCheck, BarChart, Users, Globe } from "lucide-react"
 import StylishCTA from "@/components/shared/StylishCTA"
 import MerchandisePage from "../merchandise/page"
+import React, { useState } from "react"
 
 // Products Data
 const products = [
@@ -124,60 +118,6 @@ function ProductSection({ product }: { product: (typeof products)[0] }) {
             </ul>
           </div>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-secondary hover:bg-secondary-600 w-full md:w-auto">Purchase This Product</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Purchase {product.title}</DialogTitle>
-                <DialogDescription>
-                  Fill out this form to purchase {product.title} and a team member will contact you shortly.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="purchase-name" className="text-right">
-                    Name
-                  </Label>
-                  <Input id="purchase-name" className="col-span-3" placeholder="Your full name" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="purchase-email" className="text-right">
-                    Email
-                  </Label>
-                  <Input id="purchase-email" className="col-span-3" placeholder="Your email address" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="purchase-phone" className="text-right">
-                    Phone
-                  </Label>
-                  <Input id="purchase-phone" className="col-span-3" placeholder="Your phone number" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="purchase-org" className="text-right">
-                    Organization
-                  </Label>
-                  <Input id="purchase-org" className="col-span-3" placeholder="Your organization name" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="purchase-message" className="text-right">
-                    Message
-                  </Label>
-                  <Textarea
-                    id="purchase-message"
-                    className="col-span-3"
-                    placeholder="Any specific requirements or questions"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit" className="bg-secondary hover:bg-secondary-600">
-                  Submit Purchase Request
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
 
         <div className="space-y-6">
@@ -199,7 +139,7 @@ function ProductSection({ product }: { product: (typeof products)[0] }) {
                 variant="outline"
                 className="w-full border-secondary text-secondary hover:bg-secondary hover:text-white"
               >
-                <a href="#demo">Request a Demo</a>
+                <a href="#demo">Purchase The Product</a>
               </Button>
             </div>
           </div>
@@ -255,6 +195,51 @@ function Quote(props: any) {
 }
 
 export default function ProductsPage() {
+  // Form state for Request a Product
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    organization: "",
+    product: "",
+    message: ""
+  })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState("")
+  const [error, setError] = useState("")
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setForm({ ...form, [e.target.id.replace("demo-", "")]: e.target.value })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setSuccess("")
+    setError("")
+    try {
+      const res = await fetch("http://localhost:5000/api/product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          email: form.email,
+          phone: form.phone,
+          organization: form.organization,
+          product: form.product,
+          message: form.message
+        })
+      })
+      if (!res.ok) throw new Error("Failed to submit request.")
+      setSuccess("Your request has been submitted successfully!")
+      setForm({ fullName: "", email: "", phone: "", organization: "", product: "", message: "" })
+    } catch (err: any) {
+      setError(err.message || "Something went wrong.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <>
       <main className="min-h-screen">
@@ -486,33 +471,33 @@ export default function ProductsPage() {
         <section id="demo" className="py-16 bg-secondary-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="text-3xl font-bold text-primary mb-4">Request a Product Demo</h2>
+              <h2 className="text-3xl font-bold text-primary mb-4">Request a Product</h2>
               <p className="text-gray-700">
                 See our products in action and discover how they can benefit your organization.
               </p>
             </div>
 
             <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="demo-name">Full Name</Label>
-                    <Input id="demo-name" placeholder="Your full name" />
+                    <Label htmlFor="demo-fullName">Full Name</Label>
+                    <Input id="demo-fullName" placeholder="Your full name" value={form.fullName} onChange={handleChange} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="demo-email">Email Address</Label>
-                    <Input id="demo-email" type="email" placeholder="Your email address" />
+                    <Input id="demo-email" type="email" placeholder="Your email address" value={form.email} onChange={handleChange} required />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="demo-phone">Phone Number</Label>
-                    <Input id="demo-phone" placeholder="Your phone number" />
+                    <Input id="demo-phone" placeholder="Your phone number" value={form.phone} onChange={handleChange} required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="demo-org">Organization</Label>
-                    <Input id="demo-org" placeholder="Your organization name" />
+                    <Label htmlFor="demo-organization">Organization</Label>
+                    <Input id="demo-organization" placeholder="Your organization name" value={form.organization} onChange={handleChange} required />
                   </div>
                 </div>
 
@@ -520,22 +505,27 @@ export default function ProductsPage() {
                   <Label htmlFor="demo-product">Product of Interest</Label>
                   <select
                     id="demo-product"
+                    value={form.product}
+                    onChange={handleChange}
+                    required
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <option value="">Select a product</option>
-                    <option value="academic-calendar">Academic Calendar</option>
-                    <option value="school-reform">School Reform Toolkit</option>
-                    <option value="both">Both Products</option>
+                    <option value="academic-calendar"> Academic Calendar & School Reform Toolkits </option>
+                    <option value="both">Others Products</option>
                   </select>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="demo-message">Message</Label>
-                  <Textarea id="demo-message" placeholder="Tell us about your specific needs and questions" rows={4} />
+                  <Textarea id="demo-message" placeholder="Tell us about your specific needs and questions" rows={4} value={form.message} onChange={handleChange} />
                 </div>
 
-                <Button type="submit" className="w-full bg-secondary hover:bg-secondary-600">
-                  Schedule Demo
+                {success && <div className="text-green-600 text-center font-medium">{success}</div>}
+                {error && <div className="text-red-600 text-center font-medium">{error}</div>}
+
+                <Button type="submit" className="w-full bg-secondary hover:bg-secondary-600" disabled={loading}>
+                  {loading ? "Submitting..." : "Schedule Purchase"}
                 </Button>
               </form>
             </div>
@@ -548,8 +538,7 @@ export default function ProductsPage() {
           description="Our products provide the tools and frameworks you need to achieve excellence, efficiency, and impact. Take the next step toward organizational transformation."
           primaryButtonText="Contact Our Team"
           primaryButtonLink="/contact"
-          secondaryButtonText="View All Offerings"
-          secondaryButtonLink="/offerings"
+          
           variant="secondary"
         />
       </main>

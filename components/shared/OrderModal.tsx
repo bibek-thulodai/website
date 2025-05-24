@@ -44,12 +44,31 @@ export default function OrderModal({ isOpen, onClose, productName, productCode }
     setFormData((prev) => ({ ...prev, quantity: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch("http://localhost:5000/api/merchandise", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          quantity: formData.quantity,
+          message: formData.message,
+          productName,
+          productCode,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to submit order")
+      }
+
       setIsSubmitting(false)
       setSubmitted(true)
 
@@ -65,7 +84,10 @@ export default function OrderModal({ isOpen, onClose, productName, productCode }
         setSubmitted(false)
         onClose()
       }, 2000)
-    }, 1500)
+    } catch (error) {
+      setIsSubmitting(false)
+      alert("There was an error submitting your order. Please try again.")
+    }
   }
 
   return (
@@ -145,7 +167,7 @@ export default function OrderModal({ isOpen, onClose, productName, productCode }
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="message" className="text-right">
-                    Message
+                    Product Code/address
                   </Label>
                   <Textarea
                     id="message"

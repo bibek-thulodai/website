@@ -32,15 +32,28 @@ export default function RegisterModal({ isOpen, onClose, opportunity }) {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus("loading")
 
-    // Simulate API call
-    setTimeout(() => {
-      setStatus("success")
+    try {
+      const form = new FormData()
+      form.append("name", formData.name)
+      form.append("email", formData.email)
+      form.append("phone", formData.phone)
+      form.append("coverLetter", formData.coverLetter)
+      if (formData.resume) {
+        form.append("file", formData.resume) // backend expects 'file' field for file
+      }
 
-      // Reset and close after success
+      const res = await fetch("http://localhost:5000/api/postopportunity", {
+        method: "POST",
+        body: form,
+      })
+
+      if (!res.ok) throw new Error("Failed to submit application")
+
+      setStatus("success")
       setTimeout(() => {
         setStatus("idle")
         setFormData({
@@ -52,7 +65,10 @@ export default function RegisterModal({ isOpen, onClose, opportunity }) {
         })
         onClose()
       }, 2000)
-    }, 1500)
+    } catch (err) {
+      setStatus("idle")
+      alert("Submission failed. Please try again.")
+    }
   }
 
   if (!opportunity) return null

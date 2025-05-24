@@ -1,4 +1,5 @@
-import type { Metadata } from "next"
+"use client"
+import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -9,13 +10,49 @@ import { MapPin, Phone, Mail, Clock, Calendar, Users, MessageSquare } from "luci
 import ContactHero from "@/components/contact/ContactHero"
 import StylishCTA from "@/components/shared/StylishCTA"
 
-export const metadata: Metadata = {
-  title: "Contact Us | Creating Opportunities International",
-  description:
-    "Get in touch with Creating Opportunities International. Book an appointment, send us a message, or visit our office.",
-}
-
 export default function ContactPage() {
+  // State for contact form
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  })
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<string | null>(null)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.id]: e.target.value })
+  }
+
+  const handleSubjectChange = (value: string) => {
+    setForm({ ...form, subject: value })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setResult(null)
+    try {
+      const res = await fetch("http://localhost:5000/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+      if (res.ok) {
+        setResult("Message sent successfully!")
+        setForm({ firstName: "", lastName: "", email: "", phone: "", subject: "", message: "" })
+      } else {
+        setResult("Failed to send message.")
+      }
+    } catch {
+      setResult("Failed to send message.")
+    }
+    setLoading(false)
+  }
+
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
@@ -95,19 +132,29 @@ export default function ContactPage() {
 
                       <div className="p-8">
                         <h2 className="text-2xl font-bold mb-6 text-header">Send Us a Message</h2>
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleSubmit}>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                               <label htmlFor="firstName" className="text-sm font-medium">
                                 First Name
                               </label>
-                              <Input id="firstName" placeholder="Your first name" />
+                              <Input
+                                id="firstName"
+                                placeholder="Your first name"
+                                value={form.firstName}
+                                onChange={handleChange}
+                              />
                             </div>
                             <div className="space-y-2">
                               <label htmlFor="lastName" className="text-sm font-medium">
                                 Last Name
                               </label>
-                              <Input id="lastName" placeholder="Your last name" />
+                              <Input
+                                id="lastName"
+                                placeholder="Your last name"
+                                value={form.lastName}
+                                onChange={handleChange}
+                              />
                             </div>
                           </div>
 
@@ -115,21 +162,32 @@ export default function ContactPage() {
                             <label htmlFor="email" className="text-sm font-medium">
                               Email
                             </label>
-                            <Input id="email" type="email" placeholder="Your email address" />
+                            <Input
+                              id="email"
+                              type="email"
+                              placeholder="Your email address"
+                              value={form.email}
+                              onChange={handleChange}
+                            />
                           </div>
 
                           <div className="space-y-2">
                             <label htmlFor="phone" className="text-sm font-medium">
                               Phone Number
                             </label>
-                            <Input id="phone" placeholder="Your phone number" />
+                            <Input
+                              id="phone"
+                              placeholder="Your phone number"
+                              value={form.phone}
+                              onChange={handleChange}
+                            />
                           </div>
 
                           <div className="space-y-2">
                             <label htmlFor="subject" className="text-sm font-medium">
                               Subject
                             </label>
-                            <Select>
+                            <Select value={form.subject} onValueChange={handleSubjectChange}>
                               <SelectTrigger id="subject">
                                 <SelectValue placeholder="Select a subject" />
                               </SelectTrigger>
@@ -147,11 +205,19 @@ export default function ContactPage() {
                             <label htmlFor="message" className="text-sm font-medium">
                               Message
                             </label>
-                            <Textarea id="message" placeholder="Your message" rows={5} />
+                            <Textarea
+                              id="message"
+                              placeholder="Your message"
+                              rows={5}
+                              value={form.message}
+                              onChange={handleChange}
+                            />
                           </div>
 
-                          <Button type="submit" className="w-full bg-primary hover:bg-primary-600">
-                            Send Message
+                          {result && <div className="text-center text-sm text-primary font-medium">{result}</div>}
+
+                          <Button type="submit" className="w-full bg-primary hover:bg-primary-600" disabled={loading}>
+                            {loading ? "Sending..." : "Send Message"}
                           </Button>
                         </form>
                       </div>

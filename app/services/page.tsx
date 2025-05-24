@@ -164,6 +164,45 @@ const services: Service[] = [
 ]
 
 function PlaceOrderModal({ service, open, onOpenChange }: ModalProps) {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    organization: "",
+  })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.id]: e.target.value })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    setSuccess(false)
+    try {
+      const res = await fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          serviceId: service.id,
+          serviceTitle: service.title,
+        }),
+      })
+      if (!res.ok) throw new Error("Failed to submit order")
+      setSuccess(true)
+      setForm({ name: "", email: "", phone: "", organization: "" })
+    } catch (err: any) {
+      setError(err.message || "Something went wrong")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -173,27 +212,33 @@ function PlaceOrderModal({ service, open, onOpenChange }: ModalProps) {
             Fill out this form to place your order for {service.title.toLowerCase()}.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">Name</Label>
-            <Input id="name" className="col-span-3" placeholder="Your full name" />
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">Name</Label>
+              <Input id="name" className="col-span-3" placeholder="Your full name" value={form.name} onChange={handleChange} required />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">Email</Label>
+              <Input id="email" className="col-span-3" placeholder="Your email address" value={form.email} onChange={handleChange} required />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="phone" className="text-right">Phone</Label>
+              <Input id="phone" className="col-span-3" placeholder="Your phone number" value={form.phone} onChange={handleChange} required />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="organization" className="text-right">Organization</Label>
+              <Input id="organization" className="col-span-3" placeholder="Your company or organization" value={form.organization} onChange={handleChange} />
+            </div>
+            {error && <div className="col-span-4 text-red-600 text-sm">{error}</div>}
+            {success && <div className="col-span-4 text-green-600 text-sm">Order submitted successfully!</div>}
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">Email</Label>
-            <Input id="email" className="col-span-3" placeholder="Your email address" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="phone" className="text-right">Phone</Label>
-            <Input id="phone" className="col-span-3" placeholder="Your phone number" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="organization" className="text-right">Organization</Label>
-            <Input id="organization" className="col-span-3" placeholder="Your company or organization" />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit" className="bg-[#017489] hover:bg-[#006955]">Submit Order</Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="submit" className="bg-[#017489] hover:bg-[#006955]" disabled={loading}>
+              {loading ? "Submitting..." : "Submit Order"}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )
@@ -326,10 +371,10 @@ export default function ServicesPage() {
       <StylishCTA
         title="Ready to Create New Opportunities?"
         description="Let's work together to achieve your goals and create lasting impact. Our team is ready to support your journey with tailored solutions and expert guidance."
-        primaryButtonText="Get Started"
+        primaryButtonText="Get A Consultant"
         primaryButtonLink="/contact"
-        secondaryButtonText="Request a Consultation"
-        showContactForm={true}
+      
+      
         variant="primary"
       />
     </main>

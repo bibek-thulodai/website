@@ -22,13 +22,7 @@ export default function ServicesHero() {
     <section ref={ref} className="relative h-[70vh] overflow-hidden">
       {/* Background with parallax effect */}
       <motion.div style={{ y }} className="absolute inset-0 z-0">
-        <Image
-          src="/placeholder.svg?height=1080&width=1920"
-          alt="Our Services - Creating Opportunities International"
-          fill
-          priority
-          className="object-cover"
-        />
+        
         <div className="absolute inset-0 bg-gradient-to-r from-[#017489]/90 to-[#013A87]/90"></div>
       </motion.div>
 

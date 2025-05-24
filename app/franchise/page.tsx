@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -16,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Users, Globe, CheckCircle, Award, Lightbulb, Share2, Target } from "lucide-react"
 import FranchiseHero from "@/components/franchise/FranchiseHero"
 import StylishCTA from "@/components/shared/StylishCTA"
+import React, { useState } from "react"
 
 // Franchises Data
 const franchises = [
@@ -59,11 +61,57 @@ const franchises = [
       position: "Opportunity Talk Franchisee, Mumbai",
     },
   },
-
 ]
 
 function FranchiseSection({ franchise }: { franchise: (typeof franchises)[0] }) {
   const Icon = franchise.icon
+
+  // Form state
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    experience: "",
+    franchise: franchise.title,
+  })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  // Handle input changes
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  // Handle form submit
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setSuccess(null)
+    setError(null)
+    try {
+      const res = await fetch("http://localhost:5000/api/franchises", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error("Failed to submit application")
+      setSuccess("Application submitted! We'll contact you soon.")
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        location: "",
+        experience: "",
+        franchise: franchise.title,
+      })
+    } catch (err: any) {
+      setError(err.message || "Something went wrong")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <section id={franchise.id} className="py-16 border-b border-gray-200 last:border-0">
@@ -139,30 +187,63 @@ function FranchiseSection({ franchise }: { franchise: (typeof franchises)[0] }) 
                   shortly.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
+              <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="franchise-name" className="text-right">
                     Name
                   </Label>
-                  <Input id="franchise-name" className="col-span-3" placeholder="Your full name" />
+                  <Input
+                    id="franchise-name"
+                    name="name"
+                    className="col-span-3"
+                    placeholder="Your full name"
+                    value={form.name}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="franchise-email" className="text-right">
                     Email
                   </Label>
-                  <Input id="franchise-email" className="col-span-3" placeholder="Your email address" />
+                  <Input
+                    id="franchise-email"
+                    name="email"
+                    className="col-span-3"
+                    placeholder="Your email address"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    type="email"
+                  />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="franchise-phone" className="text-right">
                     Phone
                   </Label>
-                  <Input id="franchise-phone" className="col-span-3" placeholder="Your phone number" />
+                  <Input
+                    id="franchise-phone"
+                    name="phone"
+                    className="col-span-3"
+                    placeholder="Your phone number"
+                    value={form.phone}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="franchise-location" className="text-right">
                     Location
                   </Label>
-                  <Input id="franchise-location" className="col-span-3" placeholder="City and country" />
+                  <Input
+                    id="franchise-location"
+                    name="location"
+                    className="col-span-3"
+                    placeholder="City and country"
+                    value={form.location}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="franchise-experience" className="text-right">
@@ -170,16 +251,22 @@ function FranchiseSection({ franchise }: { franchise: (typeof franchises)[0] }) 
                   </Label>
                   <Textarea
                     id="franchise-experience"
+                    name="experience"
                     className="col-span-3"
                     placeholder="Briefly describe your relevant experience"
+                    value={form.experience}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit" className="bg-accent hover:bg-accent-600">
-                  Submit Application
-                </Button>
-              </DialogFooter>
+                {success && <div className="col-span-4 text-green-600">{success}</div>}
+                {error && <div className="col-span-4 text-red-600">{error}</div>}
+                <DialogFooter>
+                  <Button type="submit" className="bg-accent hover:bg-accent-600" disabled={loading}>
+                    {loading ? "Submitting..." : "Submit Application"}
+                  </Button>
+                </DialogFooter>
+              </form>
             </DialogContent>
           </Dialog>
         </div>
@@ -310,57 +397,6 @@ export default function FranchisePage() {
                   >
                     <a href={`#${franchise.id}`}>Learn More</a>
                   </Button>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button className="bg-accent hover:bg-accent-600">Apply Now</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Apply for {franchise.title}</DialogTitle>
-                        <DialogDescription>
-                          Fill out this form to apply for the {franchise.title} franchise and a team member will contact
-                          you shortly.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor={`quick-name-${franchise.id}`} className="text-right">
-                            Name
-                          </Label>
-                          <Input
-                            id={`quick-name-${franchise.id}`}
-                            className="col-span-3"
-                            placeholder="Your full name"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor={`quick-email-${franchise.id}`} className="text-right">
-                            Email
-                          </Label>
-                          <Input
-                            id={`quick-email-${franchise.id}`}
-                            className="col-span-3"
-                            placeholder="Your email address"
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor={`quick-phone-${franchise.id}`} className="text-right">
-                            Phone
-                          </Label>
-                          <Input
-                            id={`quick-phone-${franchise.id}`}
-                            className="col-span-3"
-                            placeholder="Your phone number"
-                          />
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit" className="bg-accent hover:bg-accent-600">
-                          Submit Application
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
                 </CardFooter>
               </Card>
             ))}
